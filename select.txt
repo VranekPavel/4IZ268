@@ -1,0 +1,53 @@
+<script>
+	$("#button").prop('disabled', true);
+	
+	function vypis(){
+
+	var button = $("#sloupec").val();
+	var input = $("#hdn").val();
+	
+	$.ajax({    //create an ajax request to load_page.php
+        type: "GET",
+        url: "select.php",
+		data:{
+			button:button,
+			input:input,
+		},
+        dataType: "html",   //expect html to be returned                
+        success: function(response){                    
+            $("#response").html(response); 
+            //alert(response);
+		}
+		
+	});
+}
+
+$("#sloupec").on("focusout", function(){
+	var regex = new RegExp (/(^id$|^jmeno$|^vek$|^prijmeni$|^nick$|^semestr$|^fakulta$)/i);
+	var sloupec =$("#sloupec").val();
+	if (regex.test(sloupec)==false){
+	$("#sloupec").parent().removeClass();
+	$("#sloupec").parent().addClass('form-group has-error');
+	$("#button").prop('disabled', true);
+	}
+	else{
+	$("#sloupec").parent().removeClass();
+	$("#sloupec").parent().addClass('form-group');
+	$("#button").prop('disabled', false);
+	}
+	});
+
+</script>
+
+
+<div class="container-fluid">
+<form class="form-inline">
+<div class="form-group">
+<input  type="text" class="form-control" id="sloupec" placeholder="Sloupec">
+</div>
+<div class="form-group">
+<input  type="text" class="form-control" id="hdn" placeholder="Hodnota">
+</div>
+<button type="submit" class="btn btn-default" id="button" onclick="vypis()">Odeslat</button>
+</form>
+</div>

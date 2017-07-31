@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="cs">
+	
+	<head>
+		<meta charset="utf-8" />
+		<title>Bootstrap Grid</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<script>
+			$(document).ready(function(){
+	$("#nav").load("nav.html", setActive);
+		
+		function setActive (){
+			$("#home").addClass("active");
+		}
+	
+	$.ajax({    //create an ajax request to load_page.php
+        type: "GET",
+        url: "display.php",             
+        dataType: "html",   //expect html to be returned                
+        success: function(response){                    
+            $("#response").html(response); 
+            //alert(response);
+		}
+		
+	}); 
+	$("li").on("click", function(){
+					var prom= $(this).text();
+					$("#dropdown").text(prom).append("<span class=\"caret\"></span>");
+					
+					if (prom=="Select"){
+					$("#id").load("select.txt");
+					}
+					else if (prom=="Insert"){
+					$("#id").load("insert.txt");
+						}
+					else if (prom=="Update"){
+					$("#id").load("update.txt");
+						}
+					else if(prom=="Delete"){
+					$("#id").load("delete.txt");
+						}
+				});
+	
+});
+
+
+		</script>
+		<style>
+		#response{
+		margin:0 20px;
+		}
+		input {
+		margin:5px 0px;
+		}
+		label {
+		width: 80px;
+		}
+		</style>
+	</head>
+
+	
+	<body>
+	<div id="nav"></div>
+		<div class="container-fluid">
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="dropdown">Home
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu" >
+					<li ><a href="index.html">Home</a></li>
+					<li class="divider"></li>
+					<li id="sel"><a href="#">Select</a></li>
+					<li id="ins"><a href="#">Insert</a></li>
+					<li id="upd"><a href="#">Update</a></li>
+					<li id="del"><a href="#">Delete</a></li>
+				</ul>
+			</div>
+		</div>
+			<div id="id"></div>
+			<div id="response"></div>
+			<p id="test">
+			</p>
+	</body>
+	
+</html>

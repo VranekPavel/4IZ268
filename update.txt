@@ -1,0 +1,114 @@
+<script>
+
+
+$("#button").prop('disabled', true);
+x1=false;
+x2=false;
+
+function kontrola(){
+	var regex = new RegExp (/(^id$|^jmeno$|^vek$|^prijmeni$|^nick$|^semestr$|^fakulta$)/i);
+	var sloupec = $(this).val();
+	var id = $(this).attr('id');
+	if (regex.test(sloupec)==false){
+	$(this).parent().removeClass();
+	$(this).parent().addClass('form-group has-error');
+	$("#button").prop('disabled', true);
+	if (id=="1"){
+	x1=false;
+	}
+	else if (id=="3"){
+	x2=false;
+	}
+	}
+	else {
+	$(this).parent().removeClass();
+	$(this).parent().addClass('form-group');
+	if (id=="1"){
+	x1=true;
+	}
+	else if (id=="3"){
+	x2=true;
+	}
+	}
+}
+
+function update(){
+	var a = document.getElementById ("1");
+	var b = document.getElementById ("2");
+	var c = document.getElementById ("3");
+	var d = document.getElementById ("4");
+	
+	$.ajax({    //create an ajax request to load_page.php
+        type: "POST",
+        url: "update.php",
+		data:{
+		a:a.value,
+		b:b.value,
+		c:c.value,
+		d:d.value,
+		},
+        dataType: "html",   //expect html to be returned                
+        success: function(response){                    
+            $("#response").html(response); 
+            //alert(response);
+		}
+	});
+}
+$("#1").on("focusout", kontrola);
+$("#3").on("focusout", kontrola);
+
+$("#1, #3").on("focusout", function(){
+	if (x1==true && x2==true){
+	$("#button").prop('disabled', false);
+	}
+});
+
+$(document).on("click", "td", function(){
+	var prom = $(this).siblings(":first").text();
+	var pocet = $(this).prevAll().length;
+	var zahlavi = $("th").eq(pocet).text();
+	var puvodni = $(this).text();
+	
+	<!-- alert (puvodni); -->
+	$("#3").val("ID");
+	$("#4").val(prom);
+	$("#1").val(zahlavi);
+	$("#button").prop('disabled', false);
+	x1=true;
+	x3=true; 
+	$(this).replaceWith("<td><input id=\"input\"></input></td>");
+	$("#input").focus();
+	$("td input").on("change", function(){
+		var input = $(this).val();
+		$("#2").val(input);
+	});
+	$("td input").on("focusout", function(){
+		$(this).replaceWith(puvodni);
+	});
+});
+
+</script>
+
+<div class="container-fluid">
+	<form class="form-inline">
+		<div class="form-group">
+			<label >Hodnota</label>
+			<input type="text" class="form-control" id="1" placeholder="Sloupec">
+		</div>
+		<div class="form-group">
+			<input type="text" class="form-control" id="2" placeholder="Hodnota">	
+		</div>
+		
+		</form>
+		<form class="form-inline">
+		<div class="form-group">
+		<label >Podmínka</label>
+			<input type="text" class="form-control" id="3" placeholder="Sloupec">
+		</div>
+		<div class="form-group">
+			<input type="text" class="form-control" id="4" placeholder="Hodnota">
+		</div>
+		
+	</form>
+	<button type="submit" class="btn btn-default" id="button" onclick="update()">Odeslat</button>
+</div>	

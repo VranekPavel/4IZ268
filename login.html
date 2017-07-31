@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="cz">
+	
+	<head>
+		<meta charset="utf-8" />
+		<title>Bootstrap Grid</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script>
+		$(document).ready(function(){
+			$("#nav").load("nav.html", setActive);
+		
+		function setActive (){
+			$("#Connection").addClass("active");
+		}
+		
+			$("#btn").on("click", function(){
+			var server =$("#server").val();
+			var user =$("#user").val();
+			var pass =$("#pass").val();
+			var db =$("#db").val();
+			
+				$.ajax({
+					type:"POST",
+					url:"write.php",
+					data:{
+					server:server,
+					user:user,
+					pass:pass,
+					db:db,
+					},
+					datatype:"html",
+				});
+			});
+		});
+$(document).on("click", "#konec", function(){
+location.reload();
+});
+$(document).on("click", "#start", function(){
+			$(".left").css(left).fadeTo("fast",0.6);
+			$(".right").css(right).fadeTo("fast",0.6);
+			$(".ball").css(ballon).fadeTo("fast",0.6);
+			japAnime();
+			});
+		
+			var width = $(window).width();
+			var heig = $(window).height();
+			
+			var height=(heig/3)*2; //aby bloky nevyjeli mimo obrazovku
+			var bheight = heig-height/18 //aby koule nevyjela mimo obrazovku
+			//alert("width:"+height/18 + "height:"+heig);
+			var left = ({'width':'20px', 'height':heig/3, 'background':'black', 'position':'fixed', 'left':'0px', 'top':'0px'});
+			var right = ({'width':'20px', 'height':heig/3, 'background':'black', 'position':'fixed', 'right':'0px', 'top':'0px'});
+			var ballon = ({'position':'fixed','top':'0px','left':width-40,'width': height/18,'height': height/18,'background': 'red','-moz-border-radius': '50px','-webkit-border-radius': '50px','border-radius': '50px'})
+			
+			function japAnime(){
+			var posun = Math.floor(Math.random()*bheight);//kulička doleva
+			var posun1 = Math.floor(Math.random()*bheight);//kulička doprava
+			posun2=posun1;
+			if (posun>posun1){
+			posun2=posun1-posun;
+			}
+			else{
+			posun2=posun-posun1;
+			}
+			var blok = Math.floor(Math.random()*heig/3);
+			
+			var ball = $(".ball");
+			var bl = $(".left");
+			var br = $(".right");
+			
+			bl.animate({
+			top:posun-blok,
+			});
+			ball.animate({
+			left:20,
+			top:posun,
+			});
+			ball.animate({
+			left:width-40,
+			top:posun1,
+			});
+			br.animate({
+			top:heig/3,
+			});
+			br.animate({
+			top:posun1-blok,
+			});
+			bl.animate({
+			top:posun1-blok,
+			});
+			japAnime()
+			}
+		</script>
+		<style>
+		.form {
+			margin:auto;
+			float:none;
+			
+		}
+		.button{
+			position:fixed;
+			bottom:0px;
+			right:0px;
+		}
+		</style>
+		</head>
+		<body>
+		<div id="nav"></div>
+		<form class="form col-sm-4">
+			<div class="form-group">
+				<label for="server">Server:</label>
+				<input type="text" class="form-control" id="server">
+			</div>
+			<div class="form-group">
+				<label for="user">User:</label>
+				<input type="text" class="form-control" id="user">
+			</div>
+			<div class="form-group">
+				<label for="pass">Password:</label>
+				<input type="password" class="form-control" id="pass">
+			</div>
+			<div class="form-group">
+				<label for="data">Database:</label>
+				<input type="text" class="form-control" id="db">
+			</div>
+				<button type="submit" class="btn btn-default" id="btn">Submit</button>
+		</form>
+		<div class="left"></div>
+		<div class="right"></div>
+		<div class="ball"></div>
+		<div class="button">
+		<button id="start">Start</button>
+		<button id="konec">Konec</button>
+		</div>
+	</body>
+		
+</html>
